@@ -153,6 +153,19 @@ class CrossConv(nn.Module):
     def forward(self, x):
         return x + self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x))
 
+
+class C2fBottleneck(nn.Module):
+    # Standard bottleneck
+    def __init__(self, c1, c2, shortcut=True, g=1, k=(3,3),e=0.5):  # ch_in, ch_out, shortcut, groups, expansion
+        super().__init__()
+        c_ = int(c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, k[0], 1)
+        self.cv2 = Conv(c_, c2, k[1], 1, g=g)
+        self.add = shortcut and c1 == c2
+
+    def forward(self, x):
+        return x + self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x))
+
 class c2f(nn.Module):
     # CSP Bottleneck with 2 convolutions
     def __init__(self,c1,c2,n=1,shortcut=True,g=1,k=((3,3),(3,3))):
@@ -160,7 +173,8 @@ class c2f(nn.Module):
         self.c = int(c2*e)
         self.cv1 = Conv(c1,self.c,1,1)
         self.cv2 = Conv((2+n)*self.c,self.c,1,1)
-        self.m = nn.Sequential(*(Bottleneck(self.c,self.c,shortcut,g,e=1.0) for _ in range(n)))
+        self.m = nn.ModuleList(C2fBottleneck(self.c, self.c, shortcut, g, k=((3,3),(3,3)),e = 1.0) for _ in range(n))
+
 
 class C3(nn.Module):
     # CSP Bottleneck with 3 convolutions
