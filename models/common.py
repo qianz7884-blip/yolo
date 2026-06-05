@@ -168,7 +168,7 @@ class C2fBottleneck(nn.Module):
 
 class c2f(nn.Module):
     # CSP Bottleneck with 2 convolutions
-    def __init__(self,c1,c2,n=1,shortcut=True,g=1,k=((3,3),(3,3))):
+    def __init__(self,c1,c2,n=1,shortcut=True,g=1,k=((3,3),(3,3)),e=0.5):
         super().__init__()
         self.c = int(c2*e)
         self.cv1 = Conv(c1,self.c,1,1)
