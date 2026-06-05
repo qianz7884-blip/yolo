@@ -1,0 +1,28 @@
+# YOLOv5 🚀 by Ultralytics, GPL-3.0 license
+# Face Mask Detection Dataset
+# Example usage: python train.py --data mask.yaml
+
+# Dataset root dir structure:
+# parent
+# ├── yolov5
+# └── datasets
+#     └── mask
+#         ├── images
+#         │   ├── train/
+#         │   └── val/
+#         └── labels
+#             ├── train/
+#             └── val/
+
+
+# Train/val/test sets
+path: ./datasets/mask  # dataset root dir
+train: images/train/  # train images (relative to 'path')
+val: images/val/  # val images (relative to 'path')
+test:  # test images (optional)
+
+# Classes
+names:
+  0: with_mask
+  1: without_mask
+  2: mask_weared_incorrect

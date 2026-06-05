@@ -1,0 +1,12 @@
+# 数据集（太大，不上传）
+datasets/
+
+# 预训练权重
+*.pt
+
+# Python
+__pycache__/
+*.pyc
+
+# 运行产物
+runs/
