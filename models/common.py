@@ -153,6 +153,14 @@ class CrossConv(nn.Module):
     def forward(self, x):
         return x + self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x))
 
+class c2f(nn.Module):
+    # CSP Bottleneck with 2 convolutions
+    def __init__(self,c1,c2,n=1,shortcut=True,g=1,k=((3,3),(3,3))):
+        super().__init__()
+        self.c = int(c2*e)
+        self.cv1 = Conv(c1,self.c,1,1)
+        self.cv2 = Conv((2+n)*self.c,self.c,1,1)
+        self.m = nn.Sequential(*(Bottleneck(self.c,self.c,shortcut,g,e=1.0) for _ in range(n)))
 
 class C3(nn.Module):
     # CSP Bottleneck with 3 convolutions
