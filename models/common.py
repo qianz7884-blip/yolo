@@ -174,7 +174,9 @@ class c2f(nn.Module):
         self.cv1 = Conv(c1,self.c,1,1)
         self.cv2 = Conv((2+n)*self.c,self.c,1,1)
         self.m = nn.ModuleList(C2fBottleneck(self.c, self.c, shortcut, g, k=((3,3),(3,3)),e = 1.0) for _ in range(n))
-
+    def forward(self,x):
+        y = self.cv1(x)
+        return self.cv2(torch.cat([y]+[m(y) for m in self.m],1))
 
 class C3(nn.Module):
     # CSP Bottleneck with 3 convolutions
